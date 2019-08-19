@@ -1,15 +1,18 @@
 import React from "react"
 import PokemonCard from "../components/PokemonCard"
 
+
 class PokemonCardContainer extends React.Component {
 
-    //on user click should do two things- generate random comp cards and user card
-
-
     render() {
+      const pokes= this.props.pokemons.map(poke=>{
+        return <li><PokemonCard pokemon={poke}/></li>
+      })
     return (
       <div>
-        {/* <cards/> */}
+        <ul className="card_container">
+          {pokes}
+        </ul>
       </div>
     );
   }
