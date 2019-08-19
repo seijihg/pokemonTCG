@@ -2,6 +2,7 @@ import React from "react";
 import PlayerPokemon from "./PlayerPokemon";
 import ComputerPokemon from "./ComputerPokemon";
 import Instructions from "../components/Instructions";
+import PokemonCard from "../components/PokemonCard";
 const pokemonUrl = "https://api.pokemontcg.io/v1/cards?subtype=Basic";
 
 export default class BattleFieldContainer extends React.Component {
@@ -16,14 +17,21 @@ export default class BattleFieldContainer extends React.Component {
   componentDidMount() {
     fetch(pokemonUrl)
       .then(resp => resp.json())
-      .then(res =>
+      .then(pokemons => {
+        const pokeList = pokemons.cards.filter(c => c.attacks !== undefined)
         this.setState({
-          pokemonCards: res
+          pokemonCards: pokeList
         })
-      );
+      })
   }
 
   startButtonHandler = () => {};
+
+  pokemonCardsRender = () => {
+    return this.state.pokemonCards.map(elem => {
+      return <PokemonCard pokemon={elem} />
+    })
+  }
 
   render() {
     return (
@@ -31,6 +39,7 @@ export default class BattleFieldContainer extends React.Component {
         <Instructions startButtonHandler={this.startButtonHandler} />
         <PlayerPokemon cards={this.state.playerChosenCards} />
         <ComputerPokemon cards={this.state.randomComputerCards} />
+        {this.pokemonCardsRender()}
       </div>
     );
   }
