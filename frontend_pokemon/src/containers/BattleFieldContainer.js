@@ -87,8 +87,8 @@ this.setState({
   render() {
     return (
       <div className="battlefield">
-          <PokemonCPUFiveCards />
-         <PlayerPokemon handleSkillSelection={this.handleSkillSelection}cards={this.state.playerChosenCard} />
+        {this.state.showGivenCards ? <PokemonCPUFiveCards /> :null }
+         <PlayerPokemon handleSkillSelection={this.handleSkillSelection} cards={this.state.playerChosenCard} />
         {this.state.showGivenCards ?  <PokemonCardContainer onCardClick={this.onCardClick} pokemons={this.state.playerGivenCards} /> :  <Instructions startButtonHandler={this.startButtonHandler} /> }
       </div>
     );
