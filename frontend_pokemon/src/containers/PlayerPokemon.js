@@ -1,5 +1,6 @@
 import React from "react"
 import PokemonCard from "../components/PokemonCard";
+import SkillsDropDown from './SkillsDropDown'
 
 class PlayerPokemon extends React.Component {
 
@@ -9,12 +10,17 @@ class PlayerPokemon extends React.Component {
     render() {
 
       const playerCards= this.props.cards.map(card=>{
-        return <PokemonCard onPlayerCardClick={(e)=>this.props.onPlayerCardClick(e,card)} card={card} />
+        return <PokemonCard pokemon={card} />
+      })
+
+      const skills= this.props.cards.map(card=>{
+        return < SkillsDropDown handleSkillSelection={(e)=>this.props.handleSkillSelection(e)} pokemon={card}/>
       })
 
     return (
       <div>
         {playerCards}
+        {skills}
       </div>
     );
   }

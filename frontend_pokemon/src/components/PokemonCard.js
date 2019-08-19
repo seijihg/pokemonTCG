@@ -11,7 +11,7 @@ function PokemonCard(props) {
     })
   }
     return (
-      <div className="card">
+      <div className="card" onClick={props.onCardClick}>
         {name}
         <div>
           <img src={imageUrl}></img>

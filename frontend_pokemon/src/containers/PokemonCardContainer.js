@@ -6,7 +6,7 @@ class PokemonCardContainer extends React.Component {
 
     render() {
       const pokes= this.props.pokemons.map(poke=>{
-        return <li><PokemonCard pokemon={poke}/></li>
+        return <li><PokemonCard onCardClick={(e)=>this.props.onCardClick(e,poke)}pokemon={poke}/></li>
       })
     return (
       <div>
