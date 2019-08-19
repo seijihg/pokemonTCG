@@ -1,2 +1,2 @@
 # pokemonTCG
-Danielle and Le.
+Danielle and Le. THE MOST FUN
