@@ -4,6 +4,7 @@ import ComputerPokemon from "./ComputerPokemon";
 import Instructions from "../components/Instructions";
 import PokemonCard from "../components/PokemonCard";
 import PokemonCardContainer from './PokemonCardContainer'
+import PokemonCPUFiveCards from "./PokemonBackCardCPU";
 
 const pokemonUrl = "https://api.pokemontcg.io/v1/cards?subtype=Basic";
 
@@ -66,9 +67,9 @@ export default class BattleFieldContainer extends React.Component {
 
   render() {
     return (
-      <div>
-        <Instructions startButtonHandler={this.startButtonHandler} />
-        {/* <PlayerPokemon cards={this.playerCards()} onPlayerCardClick={this.onPlayerCardClick} /> */}
+      <div className="battlefield">
+        <PokemonCPUFiveCards />
+        {/* <Instructions startButtonHandler={this.startButtonHandler} /> */}
         <PokemonCardContainer pokemons={this.state.playerGivenCards}/>
         <ComputerPokemon cards={this.state.randomComputerCards} />
       </div>
