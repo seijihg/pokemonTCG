@@ -11,16 +11,9 @@ function PokemonCard(props) {
     })
   }
     return (
-      <div className="card" onClick={props.onCardClick}>
-        {name}
+      <div className="card">
         <div>
-          <img src={imageUrl}></img>
-        </div>
-        <div>
-          Skills:
-          <ul>
-            {skillSet()}
-          </ul>
+          <img src={imageUrl} width="180px"></img>
         </div>
       </div>
     );

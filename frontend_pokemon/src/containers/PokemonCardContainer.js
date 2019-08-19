@@ -1,5 +1,6 @@
 import React from "react"
 import PokemonCard from "../components/PokemonCard"
+import '../css/pokemon_container.css'
 
 
 class PokemonCardContainer extends React.Component {

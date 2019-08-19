@@ -3,7 +3,9 @@ import PlayerPokemon from "./PlayerPokemon";
 import ComputerPokemon from "./ComputerPokemon";
 import Instructions from "../components/Instructions";
 import PokemonCard from "../components/PokemonCard";
-import PokemonCardContainer from "./PokemonCardContainer";
+import PokemonCardContainer from './PokemonCardContainer'
+import PokemonCPUFiveCards from "./PokemonBackCardCPU";
+
 
 const pokemonUrl = "https://api.pokemontcg.io/v1/cards?subtype=Basic";
 
@@ -84,14 +86,10 @@ this.setState({
 
   render() {
     return (
-      <div>
+      <div className="battlefield">
+          <PokemonCPUFiveCards />
          <PlayerPokemon handleSkillSelection={this.handleSkillSelection}cards={this.state.playerChosenCard} />
         {this.state.showGivenCards ?  <PokemonCardContainer onCardClick={this.onCardClick} pokemons={this.state.playerGivenCards} /> :  <Instructions startButtonHandler={this.startButtonHandler} /> }
-       
-      
-       
-        {/* <ComputerPokemon cards={this.state.randomComputerCards} /> */}
-       
       </div>
     );
   }
