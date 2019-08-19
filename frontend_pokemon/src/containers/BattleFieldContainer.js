@@ -6,6 +6,7 @@ import PokemonCard from "../components/PokemonCard";
 import PokemonCardContainer from './PokemonCardContainer'
 import PokemonCPUFiveCards from "./PokemonBackCardCPU";
 
+
 const pokemonUrl = "https://api.pokemontcg.io/v1/cards?subtype=Basic";
 
 function getRandom(arr, n) {
@@ -29,25 +30,26 @@ export default class BattleFieldContainer extends React.Component {
     playerGivenCards: [],
     playerChosenCard: [],
     score: [],
-    showSingleCardAndSkills: false
+    showSingleCardAndSkills: false,
+    showGivenCards: false
   };
 
   componentDidMount() {
     fetch(pokemonUrl)
       .then(resp => resp.json())
       .then(pokemons => {
-        const pokeList = pokemons.cards.filter(c => c.attacks !== undefined)
+        const pokeList = pokemons.cards.filter(c => c.attacks !== undefined);
         this.setState({
           pokemonCards: pokeList
-        })
-        return pokeList
+        });
+        return pokeList;
       })
       .then(pokes => {
-        const playerCards = getRandom(pokes, 5)
+        const playerCards = getRandom(pokes, 5);
         this.setState({
           playerGivenCards: playerCards
-        })
-      })
+        });
+      });
   }
 
   onPlayerCardClick = (event, card) => {
@@ -57,21 +59,37 @@ export default class BattleFieldContainer extends React.Component {
     });
   };
 
-  playerCards = () => {
-    if (this.state.showSingleCardAndSkills===true){
-      return this.state.playerChosenCard
-    }else{
-      return this.state.playerGivenCards;
-    } 
+  // playerCards = () => {
+  //   if (this.state.showSingleCardAndSkills === true) {
+  //     return this.state.playerChosenCard;
+  //   } else {
+  //     return this.state.playerGivenCards;
+  //   }
+  // };
+
+  startButtonHandler = () => {
+    this.setState({
+      showGivenCards: !this.state.showGivenCards
+    });
   };
+
+  onCardClick=(e,card)=>{
+this.setState({
+  playerChosenCard: [card]
+  // showSingleCardAndSkills: !this.state.showSingleCardAndSkills
+})
+  }
+
+  handleSkillSelection=(e)=>{
+    e.preventDefault()
+  }
 
   render() {
     return (
       <div className="battlefield">
-        <PokemonCPUFiveCards />
-        {/* <Instructions startButtonHandler={this.startButtonHandler} /> */}
-        <PokemonCardContainer pokemons={this.state.playerGivenCards}/>
-        <ComputerPokemon cards={this.state.randomComputerCards} />
+          <PokemonCPUFiveCards />
+         <PlayerPokemon handleSkillSelection={this.handleSkillSelection}cards={this.state.playerChosenCard} />
+        {this.state.showGivenCards ?  <PokemonCardContainer onCardClick={this.onCardClick} pokemons={this.state.playerGivenCards} /> :  <Instructions startButtonHandler={this.startButtonHandler} /> }
       </div>
     );
   }
