@@ -1,6 +1,7 @@
 import React from "react"
+import PokemonCard from "../components/PokemonCard"
 
-class ComputerPokemon extends React.Component {
+class PokemonCardContainer extends React.Component {
 
     //on user click should do two things- generate random comp cards and user card
 
@@ -8,10 +9,10 @@ class ComputerPokemon extends React.Component {
     render() {
     return (
       <div>
-        {}
+        {/* <cards/> */}
       </div>
     );
   }
 }
 
-export default ComputerPokemon
+export default PokemonCardContainer
