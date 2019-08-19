@@ -3,6 +3,8 @@ import PlayerPokemon from "./PlayerPokemon";
 import ComputerPokemon from "./ComputerPokemon";
 import Instructions from "../components/Instructions";
 import PokemonCard from "../components/PokemonCard";
+import PokemonCardContainer from './PokemonCardContainer'
+
 const pokemonUrl = "https://api.pokemontcg.io/v1/cards?subtype=Basic";
 
 function getRandom(arr, n) {
@@ -37,17 +39,15 @@ export default class BattleFieldContainer extends React.Component {
         this.setState({
           pokemonCards: pokeList
         })
+        return pokeList
+      })
+      .then(pokes => {
+        const playerCards = getRandom(pokes, 5)
+        this.setState({
+          playerGivenCards: playerCards
+        })
       })
   }
-
-  startButtonHandler = () => {
-    const shuffle = this.state.pokemonCards.cards;
-    const playerCards = getRandom(shuffle, 5);
-
-    this.setState({
-      playerGivenCards: playerCards
-    });
-  };
 
   onPlayerCardClick = (event, card) => {
     this.setState({
@@ -64,19 +64,13 @@ export default class BattleFieldContainer extends React.Component {
     } 
   };
 
-  pokemonCardsRender = () => {
-    return this.state.pokemonCards.map(elem => {
-      return <PokemonCard pokemon={elem} />
-    })
-  }
-
   render() {
     return (
       <div>
         <Instructions startButtonHandler={this.startButtonHandler} />
-        <PlayerPokemon cards={this.playerCards()} onPlayerCardClick={this.onPlayerCardClick} />
+        {/* <PlayerPokemon cards={this.playerCards()} onPlayerCardClick={this.onPlayerCardClick} /> */}
+        <PokemonCardContainer pokemons={this.state.playerGivenCards}/>
         <ComputerPokemon cards={this.state.randomComputerCards} />
-        {this.pokemonCardsRender()}
       </div>
     );
   }
