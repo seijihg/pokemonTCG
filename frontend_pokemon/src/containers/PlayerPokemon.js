@@ -1,4 +1,5 @@
 import React from "react"
+import PokemonCard from "../components/PokemonCard";
 
 class PlayerPokemon extends React.Component {
 
@@ -6,9 +7,14 @@ class PlayerPokemon extends React.Component {
 
 
     render() {
+
+      const playerCards= this.props.cards.map(card=>{
+        return <PokemonCard onPlayerCardClick={(e)=>this.props.onPlayerCardClick(e,card)} card={card} />
+      })
+
     return (
       <div>
-        {}
+        {playerCards}
       </div>
     );
   }
