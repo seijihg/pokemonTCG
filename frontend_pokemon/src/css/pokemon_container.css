@@ -19,3 +19,39 @@ ul.card_container li {
     from {transform: rotateY(0deg);}
     to {transform: rotateY(360deg);}
 }
+
+.title {
+    font-family: 'Concert One', cursive;
+    color: rgb(0, 87, 145);
+    background: rgba(245, 245, 245, 0.705);
+    padding: 20px;
+    border-radius: 10px;
+}
+.btn {
+    padding: 10px 40px;
+}
+.btn .start {
+    background: rgba(0, 121, 202, 0.678);
+    color: rgb(255, 196, 0);
+    font-family: 'Concert One', cursive;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 20px 40px;
+    border-radius: 10px;
+}
+.leaderboard {
+    background: rgba(181, 240, 255, 0.555);
+    padding: 10px;
+    list-style: none;
+    border-radius: 10px;
+    font-family: 'Concert One', cursive;
+    color: rgb(177, 0, 0);
+    line-height: 2em;
+}
+.leaderboard p {
+    font-size: 30px;
+    font-weight: bold
+}
+.leaderboard li {
+    font-size: 20px;
+}
