@@ -1,7 +1,7 @@
 import React from "react";
 
 function PokemonCard(props) {
-  const { name, imageUrl, hp, attacks } = props.pokemon;
+  const { imageUrl, attacks } = props.pokemon;
 
   const skillSet = () => {
     return attacks.map(elem => {

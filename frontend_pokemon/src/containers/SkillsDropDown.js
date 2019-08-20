@@ -1,27 +1,28 @@
 import React from "react";
 
 class SkillsDropDown extends React.Component {
-  render() {
-    const options = this.props.pokemon.attacks.map(attack => {
-      return (
-        <option>
-          {" "}
-          {attack.name}: {attack.damage}
-        </option>
-      );
-    });
 
+  skillSet = () => {
+    const skills = this.props.attacks.filter(skill => {return skill.damage > 0 })
+    console.log(skills)
+    return(
+      <select onChange={this.props.handleSkillSelection}>
+        <option value="0">--Please choose a skill--</option>
+        {skills.map(attk => {
+          return (
+            <option value={attk.damage}>{attk.name}</option>
+          )
+        })}
+      </select>
+    )
+  }
+
+  render() {
     return (
-      <div>
-        <form onSubmit={this.props.handleSkillSelection}>
-          <label>
-            <p>Choose your players skill</p>
-            <select>{options}</select>
-            <button type="submit"> Battle </button>
-          </label>
-        </form>
-      </div>
-    );
+      <>
+        {this.skillSet()}
+      </>
+    )
   }
 }
 
