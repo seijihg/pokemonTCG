@@ -105,7 +105,6 @@ export default class BattleFieldContainer extends React.Component {
          <PlayerPokemon handleSkillSelection={this.handleSkillSelection} card={this.state.playerChosenCard} /> :
          null
         }
-         
         {this.state.showGivenCards ?  <PokemonCardContainer onCardClick={this.onCardClick} pokemons={this.state.playerGivenCards} /> :  <Instructions startButtonHandler={this.startButtonHandler} /> }
       </div>
     );
