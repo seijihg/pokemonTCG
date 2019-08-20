@@ -1,3 +1,7 @@
 .App {
   text-align: center;
+  background-image: url('https://media.giphy.com/media/u6Fsu4lYIDq5q/giphy.gif');
+  padding: 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
 }

@@ -3,5 +3,19 @@ ul.card_container {
 }
 ul.card_container li {
     display: inline-block;
-    padding: 1px;
+    padding: 10px;
+}
+
+ 
+.front {
+    animation: aniset 10s;
+    animation-iteration-count: infinite;
+}
+.back {
+    animation: aniset 10s;
+    animation-iteration-count: infinite;
+}
+@keyframes aniset {
+    from {transform: rotateY(0deg);}
+    to {transform: rotateY(360deg);}
 }
