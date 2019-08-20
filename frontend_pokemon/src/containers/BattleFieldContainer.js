@@ -3,13 +3,16 @@ import PlayerPokemon from "./PlayerPokemon";
 import ComputerPokemon from "./ComputerPokemon";
 import Instructions from "../components/Instructions";
 import PokemonCard from "../components/PokemonCard";
-import PokemonCardContainer from './PokemonCardContainer'
+import PokemonCardContainer from "./PokemonCardContainer";
 import PokemonCPUFiveCards from "./PokemonBackCardCPU";
-import BattleButton from '../components/BattleButton'
-import '../css/battlefield_container.css'
+import BattleButton from "../components/BattleButton";
+import NextRoundButton from "../components/NextRoundButton";
+import "../css/battlefield_container.css";
+import UserScoreCard from "./UserScoreCard";
+import LeaderForm from "./LeaderForm";
 
-
-const pokemonUrl = "https://api.pokemontcg.io/v1/cards?subtype=Basic";
+const pokemonUrl = "http://localhost:3005/cards";
+const gameUrl = "http://localhost:3000/games";
 
 function getRandom(arr, n) {
   let result = new Array(n),
@@ -30,84 +33,185 @@ export default class BattleFieldContainer extends React.Component {
     pokemonCards: [],
     playerGivenCards: [],
     playerChosenCard: null,
-    score: [],
-    showSingleCardAndSkills: false,
     showGivenCards: false,
     cpuCard: false,
     cpuGivenCard: null,
     playerChosenSkill: 0,
-    cpuChosenSkill: 0
+    cpuChosenSkill: 0,
+    userScore: 0,
+    playerHasSelectedCard: false,
+    inGame: false,
+    showLeaderBoardForm: false
   };
 
-  componentDidMount() {
+  handleLeaderFormSubmit = (e, userScore) => {
+    e.preventDefault();
+
+    return fetch(gameUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        player_name: e.target.name.value,
+        score: userScore
+      })
+    }).then(response => response.json()); // parses JSON response into native JavaScript objects
+  };
+
+
+  startButtonHandler = () => {
     fetch(pokemonUrl)
       .then(resp => resp.json())
       .then(pokemons => {
-        const pokeList = pokemons.cards.filter(c => c.attacks !== undefined);
         this.setState({
-          pokemonCards: pokeList
+          pokemonCards: pokemons
         });
-        return pokeList;
+        return pokemons;
       })
+
       .then(pokes => {
-        const playerCards = getRandom(pokes, 5)
-        const cpuCard = getRandom(this.state.pokemonCards, 1)[0]
+        const playerCards = getRandom(pokes, 5);
+        const cpuCard = getRandom(this.state.pokemonCards, 1)[0];
         this.setState({
           playerGivenCards: playerCards,
           cpuGivenCard: cpuCard
         });
       });
-  }
-  startButtonHandler = () => {
+
     this.setState({
       showGivenCards: !this.state.showGivenCards
     });
   };
-  onCardClick=(e,card)=>{
-    this.setState({
-      playerChosenCard: card
-    })
-  }
 
-  handleSkillSelection=(event)=>{
-    event.preventDefault()
-    console.log(event.target.value)
+  onCardClick = (e, card) => {
+    this.setState({
+      playerChosenCard: card,
+      playerHasSelectedCard: true
+    });
+  };
+
+  handleSkillSelection = event => {
+    event.preventDefault();
     this.setState({
       playerChosenSkill: event.target.value
-    })
-  }
+    });
+  };
 
   battleHandler = () => {
-    const skillCpu = this.state.cpuGivenCard.attacks.filter(skill => {return skill.damage > 0 })
-    console.log(skillCpu)
-    this.setState({
-      cpuCard: true,
-      cpuChosenSkill: getRandom(skillCpu, 1)[0].damage
-    })
-  }
+    if (this.state.playerHasSelectedCard === true) {
+      const skillCpu = this.state.cpuGivenCard.attacks.filter(skill => {
+        return skill.damage > 0;
+      });
+      this.setState({
+        cpuCard: true,
+        cpuChosenSkill: getRandom(skillCpu, 1)[0].damage,
+        playerHasSelectedCard: !this.state.playerHasSelectedCard,
+        inGame: true
+      });
+      this.compareScores();
+    } else {
+      window.alert("You must select a card first!");
+    }
+  };
+
+  nextRoundHandler = () => {
+    if (this.state.playerHasSelectedCard === true) {
+      const newCpuCard = getRandom(this.state.pokemonCards, 1)[0];
+      const skill = newCpuCard.attacks.filter(skill => {
+        return skill.damage > 0;
+      });
+
+      this.setState({
+        cpuCard: true,
+        cpuGivenCard: newCpuCard,
+        cpuChosenSkill: getRandom(skill, 1)[0].damage,
+        playerGivenCards: getRandom(this.state.pokemonCards, 5),
+        playerHasSelectedCard: !this.state.playerHasSelectedCard,
+        inGame: true
+      });
+      this.compareScores();
+    } else {
+      window.alert("You must select a card first!");
+    }
+  };
+  compareScores = () => {
+    if (
+      Number(this.state.cpuChosenSkill) > Number(this.state.playerChosenSkill)
+    ) {
+      window.alert("you lost, game over");
+      this.setState({
+        showScoreCard: false,
+        userScore: this.state.userScore,
+        showLeaderBoardForm: true,
+        showGivenCards: false,
+        hideNextRoundButton: true,
+        inGame: false
+      });
+    } else {
+      window.alert("A win! Keep going");
+      this.setState({
+        userScore: this.state.userScore + 10,
+        showScoreCard: true
+      });
+    }
+  };
 
   cpuField = () => {
     if (this.state.showGivenCards) {
-    return (
-    <div>
-      <PokemonCPUFiveCards />
-      <ComputerPokemon flipped={this.state.cpuCard} pokemon={this.state.cpuGivenCard}/>
-      <BattleButton battleHandler={this.battleHandler}/>
-    </div>
-    )}
-  }
+      return (
+        <div>
+          <PokemonCPUFiveCards />
+          <ComputerPokemon
+            flipped={this.state.cpuCard}
+            pokemon={this.state.cpuGivenCard}
+          />
+
+          {this.state.inGame ? (
+            <NextRoundButton nextRound={this.nextRoundHandler} />
+          ) : (
+            <BattleButton battleHandler={this.battleHandler} />
+          )}
+          {this.state.showScoreCard ? (
+            <UserScoreCard score={this.state.userScore} />
+          ) : null}
+        </div>
+      );
+    }
+  };
 
   render() {
-    return (
-      <div className="battlefield">
-        {this.cpuField()}
-         {this.state.playerChosenCard ? 
-         <PlayerPokemon handleSkillSelection={this.handleSkillSelection} card={this.state.playerChosenCard} /> :
-         null
-        }
-         
-        {this.state.showGivenCards ?  <PokemonCardContainer onCardClick={this.onCardClick} pokemons={this.state.playerGivenCards} /> :  <Instructions startButtonHandler={this.startButtonHandler} /> }
-      </div>
-    );
+    if (this.state.showLeaderBoardForm === true) {
+      return (
+        <LeaderForm
+          score={this.state.userScore}
+          handleLeaderFormSubmit={e =>
+            this.handleLeaderFormSubmit(e, this.state.userScore)
+          }
+        />
+      );
+    } else {
+      return (
+        <div className="battlefield">
+          {this.cpuField()}
+          {this.state.playerChosenCard ? (
+            <PlayerPokemon
+              handleSkillSelection={this.handleSkillSelection}
+              card={this.state.playerChosenCard}
+            />
+          ) : null}
+
+          {this.state.showGivenCards ? (
+            <PokemonCardContainer
+              onCardClick={this.onCardClick}
+              pokemons={this.state.playerGivenCards}
+            />
+          ) : (
+            <Instructions startButtonHandler={this.startButtonHandler} />
+          )}
+        </div>
+      );
+    }
   }
 }
