@@ -1,4 +1,5 @@
 import React from "react";
+const randomNumber= Math.floor((Math.random() * 1000) + 1)
 
 class SkillsDropDown extends React.Component {
 
@@ -7,7 +8,7 @@ class SkillsDropDown extends React.Component {
     console.log(skills)
     return(
       <select onChange={this.props.handleSkillSelection}>
-        <option value="0">--Please choose a skill--</option>
+        <option value="0" selected>--Please choose a skill--</option>
         {skills.map(attk => {
           return (
             <option value={attk.damage}>{attk.name}</option>

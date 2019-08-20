@@ -51,15 +51,15 @@ export default class BattleFieldContainer extends React.Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify({
         player_name: e.target.name.value,
         score: userScore
       })
-    }).then(response => response.json()); // parses JSON response into native JavaScript objects
+    })
+      .then(response => response.json())
+      .then((window.location = "/leaderboard"));
   };
-
 
   startButtonHandler = () => {
     fetch(pokemonUrl)
@@ -93,7 +93,6 @@ export default class BattleFieldContainer extends React.Component {
   };
 
   handleSkillSelection = event => {
-    event.preventDefault();
     this.setState({
       playerChosenSkill: event.target.value
     });
@@ -124,7 +123,7 @@ export default class BattleFieldContainer extends React.Component {
       });
 
       this.setState({
-        cpuCard: true,
+        cpuCard: false,
         cpuGivenCard: newCpuCard,
         cpuChosenSkill: getRandom(skill, 1)[0].damage,
         playerGivenCards: getRandom(this.state.pokemonCards, 5),

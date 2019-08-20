@@ -35,7 +35,7 @@ const LeaderBoard = (props) => {
                 {listOfGames()}
             </ul>
             <div className="btn">
-                <button onClick={goBackHandler} className="start">HOME</button>
+                <button onClick={()=>window.location='/'} className="start">HOME</button>
             </div>
         </div>
     )
