@@ -36,7 +36,8 @@ export default class BattleFieldContainer extends React.Component {
     showGivenCards: false,
     cpuCard: false,
     cpuGivenCard: null,
-    playerChosenSkill: 0,
+    playerChosenSkill: "",
+    playerChosenSkillDmg: 0,
     cpuChosenSkill: 0,
     userScore: 0,
     playerHasSelectedCard: false,
@@ -88,13 +89,17 @@ export default class BattleFieldContainer extends React.Component {
   onCardClick = (e, card) => {
     this.setState({
       playerChosenCard: card,
-      playerHasSelectedCard: true
+      playerHasSelectedCard: true,
+      playerChosenSkill: '',
+      playerChosenSkillDmg: 0
     });
   };
 
-  handleSkillSelection = event => {
+  handleSkillSelection = skill => {
+    if (skill === undefined) {return null}
     this.setState({
-      playerChosenSkill: event.target.value
+      playerChosenSkill: skill.name,
+      playerChosenSkillDmg: skill.damage,
     });
   };
 
@@ -137,7 +142,7 @@ export default class BattleFieldContainer extends React.Component {
   };
   compareScores = () => {
     if (
-      Number(this.state.cpuChosenSkill) > Number(this.state.playerChosenSkill)
+      Number(this.state.cpuChosenSkill) > Number(this.state.playerChosenSkillDmg)
     ) {
       window.alert("you lost, game over");
       this.setState({
@@ -196,6 +201,7 @@ export default class BattleFieldContainer extends React.Component {
           {this.cpuField()}
           {this.state.playerChosenCard ? (
             <PlayerPokemon
+              playerChosenSkill={this.state.playerChosenSkill}
               handleSkillSelection={this.handleSkillSelection}
               card={this.state.playerChosenCard}
             />
