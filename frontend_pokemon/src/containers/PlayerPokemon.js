@@ -8,8 +8,8 @@ class PlayerPokemon extends React.Component {
 
     return (
       <div>
-        {<PokemonCard pokemon={this.props.card} />}
-        {< SkillsDropDown handleSkillSelection={this.props.handleSkillSelection} {...this.props.card}/>}
+        <PokemonCard pokemon={this.props.card} />
+        < SkillsDropDown playerChosenSkill={this.props.playerChosenSkill} handleSkillSelection={this.props.handleSkillSelection} {...this.props.card}/>
       </div>
     );
   }
