@@ -1,9 +1,10 @@
 import React from 'react'
+import '../css/pokemon_container.css'
 
 const NextRoundButton = (props) => {
     return (
-        <div>
-            <button onClick={props.nextRound}>NEXT ROUND!</button>
+        <div className="btn" >
+            <button className="start" onClick={props.nextRound}>NEXT ROUND!</button>
         </div>
     )
 }

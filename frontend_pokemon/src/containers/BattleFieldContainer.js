@@ -10,6 +10,7 @@ import NextRoundButton from "../components/NextRoundButton";
 import "../css/battlefield_container.css";
 import UserScoreCard from "./UserScoreCard";
 import LeaderForm from "./LeaderForm";
+import Hint from '../components/Hint'
 
 const pokemonUrl = "http://localhost:3005/cards";
 const gameUrl = "http://localhost:3000/games";
@@ -42,7 +43,8 @@ export default class BattleFieldContainer extends React.Component {
     userScore: 0,
     playerHasSelectedCard: false,
     inGame: false,
-    showLeaderBoardForm: false
+    showLeaderBoardForm: false,
+    skillHint: false 
   };
 
   handleLeaderFormSubmit = (e, userScore) => {
@@ -91,7 +93,8 @@ export default class BattleFieldContainer extends React.Component {
       playerChosenCard: card,
       playerHasSelectedCard: true,
       playerChosenSkill: '',
-      playerChosenSkillDmg: 0
+      playerChosenSkillDmg: 0,
+      cpuCard: false
     });
   };
 
@@ -100,6 +103,7 @@ export default class BattleFieldContainer extends React.Component {
     this.setState({
       playerChosenSkill: skill.name,
       playerChosenSkillDmg: skill.damage,
+      skillHint: true
     });
   };
 
@@ -112,7 +116,8 @@ export default class BattleFieldContainer extends React.Component {
         cpuCard: true,
         cpuChosenSkill: getRandom(skillCpu, 1)[0].damage,
         playerHasSelectedCard: !this.state.playerHasSelectedCard,
-        inGame: true
+        inGame: true, 
+        skillHint: false
       });
       this.compareScores();
     } else {
@@ -128,12 +133,13 @@ export default class BattleFieldContainer extends React.Component {
       });
 
       this.setState({
-        cpuCard: false,
+        cpuCard: true,
         cpuGivenCard: newCpuCard,
         cpuChosenSkill: getRandom(skill, 1)[0].damage,
         playerGivenCards: getRandom(this.state.pokemonCards, 5),
         playerHasSelectedCard: !this.state.playerHasSelectedCard,
-        inGame: true
+        inGame: true,
+        skillHint: false
       });
       this.compareScores();
     } else {
@@ -144,7 +150,7 @@ export default class BattleFieldContainer extends React.Component {
     if (
       Number(this.state.cpuChosenSkill) > Number(this.state.playerChosenSkillDmg)
     ) {
-      window.alert("you lost, game over");
+      window.alert("You lost, GAME OVER");
       this.setState({
         showScoreCard: false,
         userScore: this.state.userScore,
@@ -154,7 +160,7 @@ export default class BattleFieldContainer extends React.Component {
         inGame: false
       });
     } else {
-      window.alert("A win! Keep going");
+      window.alert("A win! KEEP GOING");
       this.setState({
         userScore: this.state.userScore + 10,
         showScoreCard: true
@@ -180,6 +186,7 @@ export default class BattleFieldContainer extends React.Component {
           {this.state.showScoreCard ? (
             <UserScoreCard score={this.state.userScore} />
           ) : null}
+          {this.state.skillHint ? <Hint hint={this.state.cpuGivenCard}/>: null }
         </div>
       );
     }
