@@ -8,7 +8,7 @@ class PokemonCardContainer extends React.Component {
   render() {
     const pokes = this.props.pokemons.map(poke => {
       return (
-        <li key={randomNumber}>
+        <li key={poke.id}>
           <PokemonCard
             key={poke.id + randomNumber}
             onCardClick={e => this.props.onCardClick(e, poke)}
